@@ -1,0 +1,23 @@
+@import '../../../styles/color-scheme.scss';
+
+.voting .poll {
+  .callout {
+    margin: 0;
+    border-bottom: none;
+  }
+  .callout:last-child {
+    border-bottom: 1px solid rgba(10, 10, 10, 0.25);
+  }
+  .callout:first-child {
+    background: $primaryColorLight;
+  }
+  .callout.option-selectable {
+    cursor: pointer;
+  }
+  .callout.option-selectable:hover, .callout.option-selected {
+    background: $grayColorLight;
+  }
+  .callout.option-selected {
+    cursor: auto;
+  }
+}

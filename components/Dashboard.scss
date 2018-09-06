@@ -1,0 +1,15 @@
+@import '../../../styles/color-scheme.scss';
+
+.voting .dashboard {
+  hr {
+    margin: 40px 0;
+  }
+
+  .callout {
+    background-color: $primaryColor;
+    color: $textColorLight;
+  }
+  a {
+    color: $textColorLight;
+  }
+}

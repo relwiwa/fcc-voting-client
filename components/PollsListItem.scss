@@ -1,0 +1,7 @@
+@import '../../../styles/color-scheme.scss';
+
+.voting .polls-list-item {
+  .card-divider {
+    background-color: $primaryColorLight;
+  }
+}
