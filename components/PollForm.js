@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 
+import FormHelpText from '../../../reusable-components/form-help-text';
 import IconButton from '../../../reusable-components/icon-button';
 import PollFormInput from './PollFormInput';
 import PollOption from '../models/PollOption';
@@ -102,7 +103,10 @@ class PollForm extends Component {
         placeholder="Enter Your Question"
         value={question}
       />
-      <p className="help-text"><FontAwesomeIcon icon={['far', questionValid ? 'check-square' : 'square']} /> Enter your question with at least 5 characters</p>
+      <FormHelpText
+        text="Enter your question with at least 5 characters"
+        valid={questionValid}
+      />
       <h3 className="cell">Options</h3>
       {options.map((option, index) => <PollFormInput
         buttonDisabled={options.length <= 2}
@@ -115,7 +119,10 @@ class PollForm extends Component {
         placeholder={`Enter Option ${index + 1}`}
         value={option.value}
       />)}
-      <p className="help-text"><FontAwesomeIcon icon={['far', optionsValid ? 'check-square' : 'square']} /> Enter at least two options with at least 1 character each</p>
+      <FormHelpText
+        text="Enter at least two options with at least one character each"
+        valid={optionsValid}
+      />
       <div className="cell">
         <div className="button-group align-right">
           <IconButton
