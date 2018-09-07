@@ -3,6 +3,8 @@ import React, { Fragment } from 'react';
 
 import IconButton from '../../../reusable-components/icon-button';
 
+import BasenameContext from '../config/BasenameContext';
+
 import './PollsListItem.scss';
 
 const PollsListItem = ({ numberOfVotes, question, pollDuration, pollId }) => <div className="polls-list-item cell">
@@ -14,13 +16,15 @@ const PollsListItem = ({ numberOfVotes, question, pollDuration, pollId }) => <di
       <div className="grid-x align-middle">
         <div className="cell small-9 text-left"><small>{numberOfVotes} vote{numberOfVotes === 1 ? '' : 's'} within {pollDuration} days</small></div>
         <div className="cell small-3 align-self-middle text-right">
-          <IconButton
-            faIcon="times-circle"
-            foundationClass="primary"
-            link={`/frontend-projects/voting/poll/${pollId}/vote`}
-            style={{margin: 0}}
-            text="Vote now"
-          />
+          <BasenameContext.Consumer>
+            {basename => <IconButton
+              faIcon="times-circle"
+              foundationClass="primary"
+              link={`${basename}poll/${pollId}/vote`}
+              style={{margin: 0}}
+              text="Vote now"
+            />}          
+          </BasenameContext.Consumer>
         </div>
       </div>
     </div>

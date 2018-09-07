@@ -9,7 +9,9 @@ import Voting from './components/Voting';
 
 render(
   <BrowserRouter>
-    <Voting />
+    <Voting
+      basename="/"
+    />
   </BrowserRouter>,
   document.getElementById('root')
 );
