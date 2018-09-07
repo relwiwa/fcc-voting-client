@@ -10,7 +10,7 @@ import './Dashboard.scss';
 const Dashboard = ({ polls }) => {
   return <div className="dashboard">
     <div className="grid-x grid-padding-x grid-padding-y grid-margin-x text-center">
-      <h3 className="cell subheader">Effective decision making is just around the corner at Decisions, Decisions</h3>
+      <h3 className="cell subheader">Collaborative decision making has finally arrived with Decisions, Decisions</h3>
       <div className="cell medium-4 callout secondary">
         <p><FontAwesomeIcon icon="sign-in-alt" size="2x" /></p>
         <p><IconLink link="/sign-in" icon="sign-in-alt" text="Sign in" /> now and let people around the globe help you in making decisions by creating your own polls.</p>
@@ -25,7 +25,6 @@ const Dashboard = ({ polls }) => {
       </div>
     </div>
     <hr />
-{/*       <p><IconLink link="/add-poll" icon="plus-circle" text="Add new polls" /> or <IconLink link="/polls" icon="list-alt" text="manage your existing polls" /> to see how people around the globe have voted</p> */}
     <div className="grid-x grid-margin-x">
       <div className="cell medium-6">
         <h3>Latest Polls</h3>
