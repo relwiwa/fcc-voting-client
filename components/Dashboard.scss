@@ -5,11 +5,12 @@
     margin: 40px 0;
   }
 
-  .callout {
+  .callout.primary {
     background-color: $primaryColor;
     color: $textColorLight;
   }
   a {
     color: $textColorLight;
   }
+
 }

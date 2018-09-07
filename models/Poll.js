@@ -5,7 +5,7 @@ class Poll {
     this.question = question;
     this.options = options;
     this.creationDate = creationDate;
-    this.pollId = pollId;
+    this._id = pollId;
   }
 };
 

@@ -14,7 +14,7 @@ const PollsListItem = ({ numberOfVotes, question, pollDuration, pollId }) => <di
     </div>
     <div className="card-section">
       <div className="grid-x align-middle">
-        <div className="cell small-9 text-left"><small>{numberOfVotes} vote{numberOfVotes === 1 ? '' : 's'} within {pollDuration} days</small></div>
+        <div className="cell small-9 text-left"><small>{numberOfVotes} vote{numberOfVotes === 1 ? '' : 's'} within {pollDuration} day{pollDuration === 1 ? '' : 's'}</small></div>
         <div className="cell small-3 align-self-middle text-right">
           <BasenameContext.Consumer>
             {basename => <IconButton
