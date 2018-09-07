@@ -1,5 +1,5 @@
 class Poll {
-  constructor(question, options, creationDate, pollId) {
+  constructor(question = '', options = ['', ''], creationDate = new Date(), pollId = null) {
     this.question = question;
     this.options = options;
     this.creationDate = creationDate;

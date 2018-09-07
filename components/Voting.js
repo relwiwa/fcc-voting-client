@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import Dashboard from './Dashboard';
+import PollAdd from './PollAdd';
 import PollResult from './PollResult';
 import PollVote from './PollVote';
 
@@ -15,7 +16,6 @@ const Voting = ({ basename = '/backend-projects/voting/'}) => {
         Decisions, Decisions
       </h1>
       <BasenameContext.Provider value={basename}>
-        {console.log(basename)}
         <Switch>
           <Route path={`${basename}`} exact render={() => {
             return <Dashboard
@@ -31,6 +31,9 @@ const Voting = ({ basename = '/backend-projects/voting/'}) => {
             return <PollResult
               poll={mockPoll['325bcb5a-daa8-479f-8f4b-5109eff09c4f']}
             />
+          }} />
+          <Route path={`${basename}poll-add`} render={() => {
+            return <PollAdd />
           }} />
         </Switch>
       </BasenameContext.Provider>

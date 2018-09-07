@@ -1,0 +1,10 @@
+.voting .poll-form {
+  .callout {
+    margin: 0;
+    border-bottom: 0;
+  }
+  .callout:last-child {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(10, 10, 10, 0.25);
+  }
+}
