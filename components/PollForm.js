@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react';
 
 import IconButton from '../../../reusable-components/icon-button';
 import PollFormInput from './PollFormInput';
+import PollOption from '../models/PollOption';
 import './PollForm.scss';
 
 import { POLL_PHASES } from '../config/ApplicationVocab';
@@ -32,14 +33,16 @@ class PollForm extends Component {
   handleAddOption() {
     const { options } = this.state;
     this.setState({
-      options: [...options].concat(['']),
+      options: [...options].concat([new PollOption()]),
     });
   }
 
   handleChangeOption(value, index) {
     const { options } = this.state;
     const newOptions = [...options];
-    newOptions[index] = value;
+    const newOption = {...newOptions[index]};
+    newOption.value = value;
+    newOptions[index] = newOption;
     this.setState({
       options: newOptions,
     });
@@ -61,7 +64,7 @@ class PollForm extends Component {
   }
 
   validateInput(value, length) {
-    const pattern = /^[a-zA-Z0-9]*$/;
+    const pattern = /^[a-zA-Z0-9 ?,.]*$/;
     if (!pattern.test(value)) {
       return false;
     }
@@ -73,7 +76,7 @@ class PollForm extends Component {
 
   validateOptions(options) {
     for (let i = 0; i < options.length; i++) {
-      if (!this.validateInput(options[i], 1)) {
+      if (!this.validateInput(options[i].value, 1)) {
         return false;
       }
     }
@@ -110,7 +113,7 @@ class PollForm extends Component {
         label={`${index + 1}`}
         onChangeInput={(option) => this.handleChangeOption(option, index)}
         placeholder={`Enter Option ${index + 1}`}
-        value={option}
+        value={option.value}
       />)}
       <p className="help-text"><FontAwesomeIcon icon={['far', optionsValid ? 'check-square' : 'square']} /> Enter at least two options with at least 1 character each</p>
       <div className="cell">

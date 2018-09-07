@@ -1,5 +1,5 @@
 class PollOption {
-  constructor(value, votes) {
+  constructor(value = '', votes = 0) {
     this.value = value;
     this.votes = votes;
   }
