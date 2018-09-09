@@ -6,6 +6,7 @@ import Poll from './Poll';
 const PollResult = ({ poll }) => {
   const numberOfVotes = poll.voters.length;
   const pollDuration = Math.floor((Date.now() - new Date(poll.creationDate)) / 1000 / 60 / 60 / 24 + 1);
+
   return <Poll
     displayResults={true}
     numberOfVotes={numberOfVotes}

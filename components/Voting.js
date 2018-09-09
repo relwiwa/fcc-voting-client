@@ -20,6 +20,7 @@ class Voting extends Component {
       polls: [],
       error: null,
     };
+    this.handleVoteTransmitted = this.handleVoteTransmitted.bind(this);
   }
 
   getPoll(pollId) {
@@ -51,6 +52,12 @@ class Voting extends Component {
     });
   }
 
+  handleVoteTransmitted(updatedPoll) {
+    this.setState({
+      currentPoll: updatedPoll,
+    });
+  }
+
   render() {
     const { basename } = this.props;
     const { currentPoll, error, polls } = this.state;
@@ -79,6 +86,7 @@ class Voting extends Component {
               }
               else {
                 return <PollVote
+                  onVoteTransmitted={this.handleVoteTransmitted}
                   poll={currentPoll}
                 />;
               }

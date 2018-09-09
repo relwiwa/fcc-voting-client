@@ -4,7 +4,7 @@ import { Pie } from 'react-chartjs-2';
 
 import './Poll.scss';
 
-const Poll = ({ displayResults, poll: { question, options }, numberOfVotes, onSelectOption, optionSelected, optionsSelectable, statusMessage }) => <div className="poll grid-x grid-margin-y">
+const Poll = ({ displayResults, poll: { question, options }, numberOfVotes, onSelectOption, selectedOptionId, statusMessage }) => <div className="poll grid-x grid-margin-y">
   <div className="cell">
     <div className="callout">
       <h4>{question}</h4>
@@ -23,9 +23,9 @@ const Poll = ({ displayResults, poll: { question, options }, numberOfVotes, onSe
     </div>}
     <div className="callout text-center"><p>{statusMessage}</p></div>
     {options.map(option => <div
-      className={(optionSelected === option.value ? 'option-selected ' : '') + 'callout' + (onSelectOption ? ' option-selectable' : '')}
+      className={(selectedOptionId === option._id ? 'option-selected ' : '') + 'callout' + (onSelectOption ? ' option-selectable' : '')}
       key={option.value}
-      onClick={onSelectOption ? () => onSelectOption(option.value) : null}
+      onClick={onSelectOption ? () => onSelectOption(option._id) : null}
     >
       <div className="grid-x">
         <div className={displayResults ? 'small-10 ' : '' + 'cell'}>
@@ -44,9 +44,8 @@ Poll.propTypes = {
   numberOfVotes: PropTypes.number,
   poll: PropTypes.object.isRequired,
   onSelectOption: PropTypes.func,
-  optionSelected: PropTypes.string,
-  optionsSelectable: PropTypes.bool.isRequired,
-  statusMessage: PropTypes.string,
+  selectedOptionId: PropTypes.string,
+  statusMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 }
 
 export default Poll;
