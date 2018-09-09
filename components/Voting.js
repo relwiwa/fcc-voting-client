@@ -8,6 +8,7 @@ import Dashboard from './Dashboard';
 import PollAdd from './PollAdd';
 import PollEdit from './PollEdit';
 import PollResult from './PollResult';
+import Polls from './Polls';
 import PollVote from './PollVote';
 
 import BasenameContext from '../config/BasenameContext';
@@ -77,6 +78,14 @@ class Voting extends Component {
                 error={error}
                 latestPolls={polls}
                 popularPolls={polls}
+              />;
+            }} />
+            <Route path={`${basename}polls`} render={() => {
+              if (polls.length === 0 && error === null) {
+                this.getPolls();
+              }
+              return <Polls
+                polls={polls}
               />;
             }} />
             <Route path={`${basename}poll/:id/vote`} render={({ match }) => {
