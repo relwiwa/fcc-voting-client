@@ -159,7 +159,7 @@ class PollForm extends Component {
           <IconButton
             faIcon="plus"
             foundationClass={(submissionPhase ? 'disabled ' : '') + 'secondary'}
-            onClick={submissionPhase ? this.handleAddOption : null}
+            onClick={!submissionPhase ? this.handleAddOption : null}
             text="Add Option"
           />
           <IconButton
