@@ -71,7 +71,7 @@ class Voting extends Component {
         </h1>
         <BasenameContext.Provider value={basename}>
           <AuthenticationContext.Consumer>
-            {{ isAuthenticated } => <Switch>
+            {({ isAuthenticated }) => <Switch>
               <Route path={`${basename}`} exact render={() => {
                 if (polls.length === 0 && error === null) {
                   this.getPolls();
