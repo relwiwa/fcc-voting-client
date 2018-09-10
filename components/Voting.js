@@ -11,7 +11,7 @@ import PollResult from './PollResult';
 import Polls from './Polls';
 import PollVote from './PollVote';
 
-import { AuthenticationContext } from '../../../services/authentication';
+import { AuthenticationContext, getJwtToken } from '../../../services/authentication';
 import BasenameContext from '../config/BasenameContext';
 
 class Voting extends Component {
@@ -22,6 +22,7 @@ class Voting extends Component {
       polls: [],
       error: null,
     };
+    this.handleDeletePoll = this.handleDeletePoll.bind(this);
     this.handleNewPollTransmitted = this.handleNewPollTransmitted.bind(this);
     this.handleNewOptionsTransmitted = this.handleNewOptionsTransmitted.bind(this);
     this.handleVoteTransmitted = this.handleVoteTransmitted.bind(this);
@@ -54,6 +55,31 @@ class Voting extends Component {
         error: 'An error happened while getting the list of polls',
       });
     });
+  }
+
+  handleDeletePoll() {
+    const { currentPoll, polls } = this.state;
+    const { basename, history } = this.props;
+    const jwtToken = getJwtToken();
+
+    axios.delete(`http://localhost:3000/poll/${currentPoll._id}`, {
+      // delete requests send data via data property
+      data: { jwtToken },
+    })
+    .then(
+      response => {
+        history.push(`${basename}`);
+        this.setState({
+          currentPoll: null,
+          polls: polls.filter(poll => poll._id !== currentPoll._id),
+        });
+      },
+      error => {
+        this.setState({
+          error: 'An error happened while deleting your poll',
+        });
+      }
+    );
   }
 
   handleNewPollTransmitted(newPoll) {
@@ -127,6 +153,7 @@ class Voting extends Component {
                 }
                 else {
                   return <PollResult
+                    onDeletePoll={this.handleDeletePoll}
                     poll={currentPoll}
                   />;
                 }
