@@ -83,7 +83,6 @@ class PollForm extends Component {
         });
       }
     );
-    // TODO: set current Item and navigate to results view of poll via props method
   }
 
   validateInput(value, length) {

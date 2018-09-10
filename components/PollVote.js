@@ -67,7 +67,7 @@ class PollVote extends Component {
       />
       <BasenameContext.Consumer>
         {basename => <div className="grid-x grid-margin-y">
-          <div className="cell text-right">
+          <div className="cell text-center medium-text-right medium-order-2 medium-6">
             {(votingPhase === CHOSE_VOTE || votingPhase === ERROR_HAPPENED) && <IconButton
               faIcon="save"
               foundationClass={selectedOptionId === null ? 'disabled ' : '' + 'primary'}
@@ -80,6 +80,14 @@ class PollVote extends Component {
               onClick={() => history.push(`${basename}poll/${poll._id}/result`)}
               text="View Results"
             />}
+          </div>
+          <div className="cell text-center medium-text-left medium-order-1 medium-6">
+            <IconButton
+              faIcon="home"
+              foundationClass="primary"
+              link={`${basename}`}
+              text="Dashboard"
+            />
           </div>
         </div>}
       </BasenameContext.Consumer>
