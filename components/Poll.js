@@ -4,12 +4,12 @@ import { Pie } from 'react-chartjs-2';
 
 import './Poll.scss';
 
-const Poll = ({ displayResults, poll: { question, options }, numberOfVotes, onSelectOption, selectedOptionId, statusMessage }) => <div className="poll grid-x grid-margin-y">
+const Poll = ({ displayChart, displayResults, poll: { question, options }, numberOfVotes, onSelectOption, selectedOptionId, statusMessage }) => <div className="poll grid-x grid-margin-y">
   <div className="cell">
     <div className="callout">
       <h4>{question}</h4>
     </div>
-    {(displayResults && numberOfVotes > 0) && <div className="callout">
+    {(displayChart && numberOfVotes > 0) && <div className="callout">
       <div className="grid-x">
         <div className="cell medium-8 medium-offset-2">
           <Pie
@@ -40,6 +40,7 @@ const Poll = ({ displayResults, poll: { question, options }, numberOfVotes, onSe
 </div>;
 
 Poll.propTypes = {
+  displayChart: PropTypes.bool.isRequired,
   displayResults: PropTypes.bool.isRequired,
   numberOfVotes: PropTypes.number,
   poll: PropTypes.object.isRequired,

@@ -59,6 +59,7 @@ class PollVote extends Component {
 
     return <div className="poll-vote">
       <Poll
+        displayChart={false}
         displayResults={false}
         onSelectOption={votingPhase === CHOSE_VOTE ? (selectedOptionId) => this.setState({ selectedOptionId }) : null}
         selectedOptionId={selectedOptionId}

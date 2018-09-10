@@ -23,7 +23,7 @@ class Voting extends Component {
       error: null,
     };
     this.handleNewPollTransmitted = this.handleNewPollTransmitted.bind(this);
-    this.handleUpdatedPollTransmitted = this.handleUpdatedPollTransmitted.bind(this);
+    this.handleNewOptionsTransmitted = this.handleNewOptionsTransmitted.bind(this);
     this.handleVoteTransmitted = this.handleVoteTransmitted.bind(this);
   }
 
@@ -64,7 +64,7 @@ class Voting extends Component {
     history.push(`${basename}poll/${newPoll['_id']}/result`);
   }
 
-  handleUpdatedPollTransmitted(updatedPoll) {
+  handleNewOptionsTransmitted(updatedPoll) {
     const { basename, history } = this.props;
     this.setState({
       currentPoll: updatedPoll,
@@ -154,7 +154,7 @@ class Voting extends Component {
                   }
                   else {
                     return <PollEdit
-                      onUpdatedPollTransmitted={this.handleUpdatedPollTransmitted}
+                      onNewOptionsTransmitted={this.handleNewOptionsTransmitted}
                       poll={currentPoll}
                     />;
                   }

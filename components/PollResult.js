@@ -13,7 +13,8 @@ const PollResult = ({ poll }) => {
   return <AuthenticationContext.Consumer>
     {({ authenticatedUserId }) => <BasenameContext.Consumer>
       {basename => <Fragment>
-        <Poll 
+        <Poll
+          displayChart={true}
           displayResults={true}
           numberOfVotes={numberOfVotes}
           poll={poll}
