@@ -16,6 +16,15 @@ class PollResult extends Component {
     this.state = {
       showModal: false,
     };
+    this.setupTwitterLink = this.setupTwitterLink.bind(this);
+  }
+
+  setupTwitterLink(basename) {
+    const { poll } = this.props;
+    const twitterUrl = 'https://twitter.com/intent/tweet?text=';
+    const text = `Help me decide on Decisions, Decisions on the following question: "${poll.question}"`;
+    const link = `http://localhost:3000${basename}poll/${poll._id}/vote`;
+    return twitterUrl + text + link;
   }
 
   render() {
@@ -55,6 +64,8 @@ class PollResult extends Component {
               <IconButton
                 faIcon={['fab', 'twitter']}
                 foundationClass="primary"
+                link={this.setupTwitterLink(basename)}
+                target="new"
                 text="Tweet Poll"
                 />
               <IconButton
