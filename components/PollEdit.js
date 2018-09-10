@@ -131,7 +131,7 @@ class PollEdit extends Component {
           formValid={optionsValid}
           onAddOption={this.handleAddOption}
           onSubmitPoll={this.handleSubmitPoll}
-          submissionPhase={false}
+          submissionPhase={phase === SUBMIT_POLL}
         />
       </div>
     </div>;
