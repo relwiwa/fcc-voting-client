@@ -2,7 +2,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
 import Dashboard from './Dashboard';
 import PollAdd from './PollAdd';
@@ -22,6 +22,7 @@ class Voting extends Component {
       polls: [],
       error: null,
     };
+    this.handleNewPollTransmitted = this.handleNewPollTransmitted.bind(this);
     this.handleVoteTransmitted = this.handleVoteTransmitted.bind(this);
   }
 
@@ -52,6 +53,14 @@ class Voting extends Component {
         error: 'An error happened while getting the list of polls',
       });
     });
+  }
+
+  handleNewPollTransmitted(newPoll) {
+    const { basename, history } = this.props;
+    this.setState({
+      currentPoll: newPoll,
+    });
+    history.push(`${basename}poll/${newPoll['_id']}/result`);
   }
 
   handleVoteTransmitted(updatedPoll) {
@@ -115,7 +124,9 @@ class Voting extends Component {
               }} />
               <Route path={`${basename}poll-add`} render={({ match }) => {
                 if (isAuthenticated) {
-                  return <PollAdd />
+                  return <PollAdd
+                    onNewPollTransmitted={this.handleNewPollTransmitted}
+                  />
                 }
                 else {
                   return <Redirect to={{
@@ -163,4 +174,4 @@ Voting.propTypes = {
   basename: PropTypes.string,
 };
 
-export default Voting;
+export default withRouter(Voting);

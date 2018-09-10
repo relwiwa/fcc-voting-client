@@ -1,19 +1,23 @@
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import FormHelpText from '../../../reusable-components/form-help-text';
 import IconButton from '../../../reusable-components/icon-button';
 import PollFormInput from './PollFormInput';
 import PollOption from '../models/PollOption';
 import './PollForm.scss';
-
+import { getJwtToken } from '../../../services/authentication';
+import BasenameContext from '../config/BasenameContext';
 import { POLL_PHASES } from '../config/ApplicationVocab';
-const { ENTER_POLL, SUBMIT_POLL } = POLL_PHASES;
+const { ENTER_POLL, ERROR_HAPPENED, SUBMIT_POLL } = POLL_PHASES;
 
 const statusMessages = {};
 statusMessages[ENTER_POLL] = 'Enter your question with at least two options';
 statusMessages[SUBMIT_POLL] = <Fragment><FontAwesomeIcon icon="spinner" spin /> Your poll is being transferred</Fragment>;
+statusMessages[ERROR_HAPPENED] = 'An error happened while trying to save your new poll';
 
 class PollForm extends Component {
   constructor(props) {
@@ -57,10 +61,28 @@ class PollForm extends Component {
   }
 
   handleSubmitPoll() {
-    // TODO: API Call
+    const { apiMethod, apiUrl, onPollTransmitted } = this.props;
+    const { options, question } = this.state;
+    const jwtToken = getJwtToken();
+
     this.setState({
       phase: SUBMIT_POLL,
     });
+    axios[apiMethod](apiUrl, {
+      question,
+      options,
+      jwtToken,
+    })
+    .then(
+      response => {
+        onPollTransmitted(response.data.poll);
+      },
+      error => {
+        this.setState({
+          phase: ERROR_HAPPENED,
+        });
+      }
+    );
     // TODO: set current Item and navigate to results view of poll via props method
   }
 
@@ -85,10 +107,11 @@ class PollForm extends Component {
   }
 
   render() {
-    const { headline } = this.props;
+    const { cancelUrlFragment, headline, history } = this.props;
     const { options, phase, question } = this.state;
     const questionValid = this.validateInput(question, 5);
     const optionsValid = this.validateOptions(options);
+    const submissionPhase = phase === SUBMIT_POLL;
 
     return <div className="poll-form grid-x">
       <div className="cell">
@@ -125,16 +148,24 @@ class PollForm extends Component {
       />
       <div className="cell">
         <div className="button-group align-right">
+          <BasenameContext.Consumer>
+            {basename => <IconButton
+              faIcon="times"
+              foundationClass={(submissionPhase ? 'disabled ' : '') + 'warning'}
+              onClick={!submissionPhase ? () => history.push(`${basename}${cancelUrlFragment}`) : null}
+              text="Cancel"
+            />}
+          </BasenameContext.Consumer>
           <IconButton
             faIcon="plus"
-            foundationClass="secondary"
-            onClick={this.handleAddOption}
+            foundationClass={(submissionPhase ? 'disabled ' : '') + 'secondary'}
+            onClick={submissionPhase ? this.handleAddOption : null}
             text="Add Option"
           />
           <IconButton
             faIcon="save"
-            foundationClass={(questionValid && optionsValid ? '' : 'disabled ') + 'primary'}
-            onClick={questionValid && optionsValid ? this.handleSubmitPoll : null}
+            foundationClass={(!submissionPhase && questionValid && optionsValid ? '' : 'disabled ') + 'primary'}
+            onClick={(!submissionPhase && questionValid && optionsValid) ? this.handleSubmitPoll : null}
             text="Submit Poll"
           />
         </div>
@@ -144,8 +175,12 @@ class PollForm extends Component {
 }
 
 PollForm.propTypes = {
+  apiMethod: PropTypes.oneOf(['patch', 'post']).isRequired,
+  apiUrl: PropTypes.string.isRequired,
+  cancelUrlFragment: PropTypes.string.isRequired,
   headline: PropTypes.string.isRequired,
+  onPollTransmitted: PropTypes.func.isRequired,
   poll: PropTypes.object.isRequired,
 };
 
-export default PollForm;
+export default withRouter(PollForm);
