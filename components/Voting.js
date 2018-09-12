@@ -10,6 +10,7 @@ import PollEdit from './PollEdit';
 import PollResult from './PollResult';
 import Polls from './Polls';
 import PollVote from './PollVote';
+import ProtectedRoute from '../../../reusable-components/protected-route';
 
 import { AuthenticationContext, getJwtToken } from '../../../services/authentication';
 import BasenameContext from '../config/BasenameContext';
@@ -158,23 +159,18 @@ class Voting extends Component {
                   />;
                 }
               }} />
-              <Route path={`${basename}poll-add`} render={({ match }) => {
-                if (isAuthenticated) {
-                  return <PollAdd
-                    onNewPollTransmitted={this.handleNewPollTransmitted}
-                  />
-                }
-                else {
-                  return <Redirect to={{
-                    pathname: "/sign-in",
-                    state: {
-                      redirectTo: match.path,
-                    }
-                  }} />
-                }
-              }} />
-              <Route path={`${basename}poll/:id/edit`} render={({ match }) => {
-                if (isAuthenticated) {
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                path={`${basename}poll-add`}
+                render={() => <PollAdd
+                  onNewPollTransmitted={this.handleNewPollTransmitted}
+                />}
+                signInMessage="Please sign in to Decisions, Decisions to add and edit polls."
+              />
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                path={`${basename}poll/:id/edit`}
+                render={({ match }) => {
                   if (!error && (!currentPoll || currentPoll._id !== match.params.id)) {
                     this.getPoll(match.params.id);
                     return <div className="text-center"><FontAwesomeIcon icon="spinner" spin /> Loading current poll</div>;
@@ -185,16 +181,9 @@ class Voting extends Component {
                       poll={currentPoll}
                     />;
                   }
-                }
-                else {
-                  return <Redirect to={{
-                    pathname: "/sign-in",
-                    state: {
-                      redirectTo: match.url,
-                    }
-                  }} />
-                }
-              }} />
+                }}
+                signInMessage="Please sign in to Decisions, Decisions to add and edit polls"
+              />
             </Switch>}
           </AuthenticationContext.Consumer>
         </BasenameContext.Provider>
