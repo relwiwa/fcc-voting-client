@@ -17,7 +17,18 @@ const Dashboard = ({ error, latestPolls, popularPolls }) => {
           <h3 className="cell subheader">Collaborative decision making has finally arrived with Decisions, Decisions</h3>
           {!isAuthenticated && <div className="cell medium-4 callout primary">
             <p><FontAwesomeIcon icon="sign-in-alt" size="2x" /></p>
-            <p><IconLink link="/sign-in" icon="sign-in-alt" text="Sign in" /> now and let people around the globe help you in making decisions by creating your own polls.</p>
+            <p>
+              <IconLink
+                link={{
+                  pathname: '/sign-in',
+                  state: {
+                    from: `${basename}`,
+                    project: 'Decisions, Decisions',
+                  },
+                }}
+                icon="sign-in-alt"
+                text="Sign in"
+              /> now and let people around the globe help you in making decisions by creating your own polls.</p>
           </div>}
           {!isAuthenticated && <div className="cell medium-4 callout primary">
             <p><FontAwesomeIcon icon="user-plus" size="2x" /></p>

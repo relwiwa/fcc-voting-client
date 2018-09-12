@@ -165,7 +165,7 @@ class Voting extends Component {
                 render={() => <PollAdd
                   onNewPollTransmitted={this.handleNewPollTransmitted}
                 />}
-                signInMessage="Please sign in to Decisions, Decisions to add and edit polls."
+                project="Decisions, Decisions"
               />
               <ProtectedRoute
                 isAuthenticated={isAuthenticated}
@@ -182,7 +182,7 @@ class Voting extends Component {
                     />;
                   }
                 }}
-                signInMessage="Please sign in to Decisions, Decisions to add and edit polls"
+                project="Decisions, Decisions"
               />
             </Switch>}
           </AuthenticationContext.Consumer>
