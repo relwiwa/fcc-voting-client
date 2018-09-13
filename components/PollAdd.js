@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import './PollAdd.scss';
 
 import { getJwtToken } from '../../../services/authentication';
+import BasenameContext from '../config/BasenameContext';
 import FormHelpText from '../../../reusable-components/form-help-text';
 import Poll from '../models/Poll';
 import PollFormButtons from './PollFormButtons';
@@ -63,8 +64,8 @@ class PollAdd extends Component {
     });
   }
 
-  handleSubmitPoll() {
-    const { onNewPollTransmitted } = this.props;
+  handleSubmitPoll(basename) {
+    const { history } = this.props;
     const { options, question } = this.state;
     const jwtToken = getJwtToken();
 
@@ -78,7 +79,7 @@ class PollAdd extends Component {
     })
     .then(
       response => {
-        onNewPollTransmitted(response.data.poll);
+        history.push(`${basename}poll/${response.data.poll['_id']}/result`);
       },
       error => {
         this.setState({
@@ -142,20 +143,18 @@ class PollAdd extends Component {
         />
       </div>
       <div className="cell">
-        <PollFormButtons
-          cancelUrlFragment={``}
-          formValid={optionsValid && questionValid}
-          onAddOption={this.handleAddOption}
-          onSubmitPoll={this.handleSubmitPoll}
-          submissionPhase={phase === SUBMIT_POLL}
-        />
+        <BasenameContext.Consumer>
+          {basename => <PollFormButtons
+            cancelUrlFragment={``}
+            formValid={optionsValid && questionValid}
+            onAddOption={this.handleAddOption}
+            onSubmitPoll={() => this.handleSubmitPoll(basename)}
+            submissionPhase={phase === SUBMIT_POLL}
+          />}
+        </BasenameContext.Consumer>
       </div>
     </div>;
   }
 }
 
-PollAdd.propTypes = {
-  onNewPollTransmitted: PropTypes.func.isRequired,
-};
-
-export default PollAdd;
+export default withRouter(PollAdd);
