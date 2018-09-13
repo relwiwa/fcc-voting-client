@@ -1,8 +1,9 @@
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
+import IconLink from '../../../reusable-components/icon-link';
 import PollEdit from './PollEdit';
 import PollResult from './PollResult';
 import PollVote from './PollVote';
@@ -89,7 +90,31 @@ class PollContainer extends Component {
       currentPoll: updatedPoll,
     });
   }
-  
+
+  renderErrorReset(basename) {
+    const { history } = this.props;
+
+    return <Fragment>
+      <IconLink
+        icon="redo"
+        onClick={() => {
+          this.setState({
+            error: false,
+            loading: 'Loading poll',
+          });
+          this.getPoll();
+        }}
+        text="Try again"
+      /> or go back to <IconLink
+        icon="home"
+        onClick={() => {
+          history.push(basename)
+        }}
+        text="Dashboard"
+      />
+    </Fragment>;
+  }
+
   render() {
     const { isAuthenticated } = this.props;
     const { currentPoll, error, loading } = this.state;
@@ -100,6 +125,7 @@ class PollContainer extends Component {
           path={`${basename}poll/:id/vote`}
           render={() => <PollVoteWithLoadingAndErrorHandling
             error={error}
+            errorReset={this.renderErrorReset(basename)}
             loading={loading}
             onVoteTransmitted={this.handleVoteTransmitted}
             poll={currentPoll}
@@ -109,6 +135,7 @@ class PollContainer extends Component {
           path={`${basename}poll/:id/result`}
           render={() => <PollResultWithLoadingAndErrorHandling
             error={error}
+            errorReset={this.renderErrorReset(basename)}
             loading={loading}
             onDeletePoll={() => this.handleDeletePoll(basename)}
             poll={currentPoll}
@@ -119,6 +146,7 @@ class PollContainer extends Component {
           path={`${basename}poll/:id/edit`}
           render={() => <PollEditWithLoadingAndErrorHandling
             error={error}
+            errorReset={this.renderErrorReset(basename)}
             loading={loading}
             onNewOptionsTransmitted={(updatedPoll) => this.handleNewOptionsTransmitted(updatedPoll, basename)}
             poll={currentPoll}
