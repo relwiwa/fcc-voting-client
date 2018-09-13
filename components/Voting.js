@@ -1,42 +1,19 @@
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 
-import Dashboard from './Dashboard';
 import PollAdd from './PollAdd';
 import PollContainer from './PollContainer';
-import Polls from './Polls';
+import PollsContainer from './PollsContainer';
 import ProtectedRoute from '../../../reusable-components/protected-route';
 
-import { AuthenticationContext, getJwtToken } from '../../../services/authentication';
+import { AuthenticationContext } from '../../../services/authentication';
 import BasenameContext from '../config/BasenameContext';
-import Poll from '../models/Poll';
 
 class Voting extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      polls: [],
-      error: null,
-    };
     this.handleNewPollTransmitted = this.handleNewPollTransmitted.bind(this);
-    console.log(props.history.location);
-  }
-
-  getPolls() {
-    axios.get('http://localhost:3000/polls')
-    .then(response => {
-      this.setState({
-        polls: response.data.polls,
-      });
-    })
-    .catch(error => {
-      this.setState({
-        error: 'An error happened while getting the list of polls',
-      });
-    });
   }
 
   handleNewPollTransmitted(newPoll) {
@@ -46,7 +23,6 @@ class Voting extends Component {
 
   render() {
     const { basename } = this.props;
-    const { error, polls } = this.state;
 
     return (
       <div className="voting grid-container grid-container-padded">
@@ -55,25 +31,32 @@ class Voting extends Component {
         </h1>
         <BasenameContext.Provider value={basename}>
           <AuthenticationContext.Consumer>
-            {({ isAuthenticated }) => <Switch>
-              <Route path={`${basename}`} exact render={() => {
-                if (polls.length === 0 && error === null) {
-                  this.getPolls();
-                }
-                return <Dashboard
-                  error={error}
-                  latestPolls={polls}
-                  popularPolls={polls}
-                />;
-              }} />
-              <Route path={`${basename}polls`} render={() => {
-                if (polls.length === 0 && error === null) {
-                  this.getPolls();
-                }
-                return <Polls
-                  polls={polls}
-                />;
-              }} />
+            {({ isAuthenticated, authenticatedUserId }) => <Switch>
+              <Route
+                path={`${basename}`}
+                exact
+                render={() => <PollsContainer
+                  authenticatedUserId={authenticatedUserId}
+                  isAuthenticated={isAuthenticated}
+                />}
+              />
+              <Route
+                path={`${basename}polls`}
+                exact
+                render={() => <PollsContainer
+                  authenticatedUserId={authenticatedUserId}
+                  isAuthenticated={isAuthenticated}
+                />}
+              />
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                path={`${basename}polls-user`}
+                render={() => <PollsContainer
+                  authenticatedUserId={authenticatedUserId}
+                  isAuthenticated={isAuthenticated}
+                />}
+                project="Decisions, Decisions"
+              />
               <Route
                 path={`${basename}poll/:pollId/vote`}
                 render={() => <PollContainer

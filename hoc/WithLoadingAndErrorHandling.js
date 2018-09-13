@@ -6,16 +6,14 @@ import IconLink from '../../../reusable-components/icon-link';
 import BasenameContext from '../config/BasenameContext';
 
 const WithLoadingAndErrorHandling = (WrappedComponent)  => {
-  return ({ error, loading, ...props }) => {
+  return ({ error, errorReset, loading, ...props }) => {
     if (loading) {
       return <div className="text-center"><FontAwesomeIcon icon="spinner" spin /> {loading}</div>;
     }
     else if (error) {
       return <div className="text-center">
         <div><FontAwesomeIcon icon="exclamation-circle" /> {error}</div>
-        <BasenameContext.Consumer>
-          {basename => <div><br />Return to <IconLink link={basename} text="Dashboard" icon="home" /></div>}
-        </BasenameContext.Consumer>
+        <div><br />{errorReset}</div>
       </div>;
     }
     else {
@@ -26,6 +24,7 @@ const WithLoadingAndErrorHandling = (WrappedComponent)  => {
 
 WithLoadingAndErrorHandling.propTypes = {
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
+  errorReset: PropTypes.object,
   loading: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
 };
 

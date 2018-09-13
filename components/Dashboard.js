@@ -9,7 +9,7 @@ import { AuthenticationContext } from '../../../services/authentication';
 
 import './Dashboard.scss';
 
-const Dashboard = ({ error, latestPolls, popularPolls }) => {
+const Dashboard = ({ children }) => {
   return <div className="dashboard">
     <AuthenticationContext.Consumer>
       {({ isAuthenticated }) => <BasenameContext.Consumer>
@@ -40,7 +40,7 @@ const Dashboard = ({ error, latestPolls, popularPolls }) => {
           </div>}
           {isAuthenticated && <div className="cell medium-4 callout primary">
             <p><FontAwesomeIcon icon="list" size="2x" /></p>
-            <p>See how people voted and <IconLink link={`${basename}polls`} icon="list" text="manage your polls" /></p>
+            <p>See how people voted and <IconLink link={`${basename}polls-user`} icon="list" text="manage your polls" /></p>
           </div>}
           <div className="cell medium-4 callout primary">
             <p><FontAwesomeIcon icon="times-circle" size="2x" /></p>
@@ -50,30 +50,11 @@ const Dashboard = ({ error, latestPolls, popularPolls }) => {
       </BasenameContext.Consumer>}
     </AuthenticationContext.Consumer>
     <hr />
-    {error && <div className="grid-x">
-      <div className="cell callout alert">{error}</div>
-    </div>}
-    {!error && <div className="grid-x grid-margin-x">
-      <div className="cell medium-6">
-        <h3>Latest Polls</h3>
-        {latestPolls.length
-          ? <PollsList polls={latestPolls.slice(0, 3)} />
-          : <span><FontAwesomeIcon icon="spinner" spin /> Loading latest polls</span>}
-      </div>
-      <div className="cell medium-6">
-        <h3>Most Popular Polls</h3>
-        {popularPolls.length
-          ? <PollsList polls={popularPolls.slice(0, 3)} />
-          : <span><FontAwesomeIcon icon="spinner" spin /> Loading most popular polls</span>}
-      </div>
-    </div>}
+    {children}
   </div>;
 };
 
 Dashboard.propTypes = {
-  error: PropTypes.string,
-  latestPolls: PropTypes.array.isRequired,
-  popularPolls: PropTypes.array.isRequired,
 };
 
 export default Dashboard;

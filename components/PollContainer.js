@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
@@ -56,9 +55,9 @@ class PollContainer extends Component {
     );
   }
 
-  handleDeletePoll() {
-    const { currentPoll, polls } = this.state;
-    const { basename, history } = this.props;
+  handleDeletePoll(basename) {
+    const { currentPoll } = this.state;
+    const { history } = this.props;
     const jwtToken = getJwtToken();
 
     axios.delete(`http://localhost:3000/poll/${currentPoll._id}`, {
@@ -68,10 +67,6 @@ class PollContainer extends Component {
     .then(
       response => {
         history.push(`${basename}`);
-        this.setState({
-          currentPoll: null,
-          polls: polls.filter(poll => poll._id !== currentPoll._id),
-        });
       },
       error => {
         this.setState({
@@ -115,7 +110,7 @@ class PollContainer extends Component {
           render={() => <PollResultWithLoadingAndErrorHandling
             error={error}
             loading={loading}
-            onDeletePoll={this.handleDeletePoll}
+            onDeletePoll={() => this.handleDeletePoll(basename)}
             poll={currentPoll}
           />}
         />
