@@ -73,7 +73,7 @@ class PollAdd extends Component {
       phase: SUBMIT_POLL,
     });
     axios.post('http://localhost:3000/poll', {
-      question,
+      question: question.endsWith('?') ? question : `${question}?`,
       options,
       jwtToken,
     })
