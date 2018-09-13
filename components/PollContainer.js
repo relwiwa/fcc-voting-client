@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
 import IconLink from '../../../reusable-components/icon-link';
+import PollAdd from './PollAdd';
 import PollEdit from './PollEdit';
 import PollResult from './PollResult';
 import PollVote from './PollVote';
@@ -28,6 +29,7 @@ class PollContainer extends Component {
     };
     this.handleDeletePoll = this.handleDeletePoll.bind(this);
     this.handleNewOptionsTransmitted = this.handleNewOptionsTransmitted.bind(this);
+    this.handleNewPollTransmitted = this.handleNewPollTransmitted.bind(this);
     this.handleVoteTransmitted = this.handleVoteTransmitted.bind(this);
   }
 
@@ -83,6 +85,14 @@ class PollContainer extends Component {
       currentPoll: updatedPoll,
     });
     history.push(`${basename}poll/${updatedPoll['_id']}/result`);
+  }
+
+  handleNewPollTransmitted(newPoll, basename) {
+    const { history } = this.props;
+    this.setState({
+      currentPoll: newPoll,
+    });
+    history.push(`${basename}poll/${newPoll['_id']}/result`);
   }
 
   handleVoteTransmitted(updatedPoll) {
@@ -150,6 +160,14 @@ class PollContainer extends Component {
             loading={loading}
             onNewOptionsTransmitted={(updatedPoll) => this.handleNewOptionsTransmitted(updatedPoll, basename)}
             poll={currentPoll}
+          />}
+          project="Decisions, Decisions"
+        />
+        <ProtectedRoute
+          isAuthenticated={isAuthenticated}
+          path={`${basename}poll-add`}
+          render={() => <PollAdd 
+            onNewPollTransmitted={(newPoll) => this.handleNewPollTransmitted(newPoll, basename)}
           />}
           project="Decisions, Decisions"
         />

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import PollAdd from './PollAdd';
 import PollContainer from './PollContainer';
 import PollsContainer from './PollsContainer';
 import ProtectedRoute from '../../../reusable-components/protected-route';
@@ -66,7 +65,9 @@ const Voting = ({ basename = '/backend-projects/voting/' }) => {
             <ProtectedRoute
               isAuthenticated={isAuthenticated}
               path={`${basename}poll-add`}
-              render={() => <PollAdd />}
+              render={() => <PollContainer
+                isAuthenticated={isAuthenticated}
+              />}
               project="Decisions, Decisions"
             />
           </Switch>}
