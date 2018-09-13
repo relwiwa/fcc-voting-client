@@ -6,42 +6,23 @@ import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
 import Dashboard from './Dashboard';
 import PollAdd from './PollAdd';
-import PollEdit from './PollEdit';
-import PollResult from './PollResult';
+import PollContainer from './PollContainer';
 import Polls from './Polls';
-import PollVote from './PollVote';
 import ProtectedRoute from '../../../reusable-components/protected-route';
 
 import { AuthenticationContext, getJwtToken } from '../../../services/authentication';
 import BasenameContext from '../config/BasenameContext';
+import Poll from '../models/Poll';
 
 class Voting extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentPoll: null,
       polls: [],
       error: null,
     };
-    this.handleDeletePoll = this.handleDeletePoll.bind(this);
     this.handleNewPollTransmitted = this.handleNewPollTransmitted.bind(this);
-    this.handleNewOptionsTransmitted = this.handleNewOptionsTransmitted.bind(this);
-    this.handleVoteTransmitted = this.handleVoteTransmitted.bind(this);
-  }
-
-  getPoll(pollId) {
-    // error handing if poll does not exist, no such poll message
-    axios.get(`http://localhost:3000/poll/${pollId}`)
-    .then(response => {
-      this.setState({
-        currentPoll: response.data.poll,
-      });
-    })
-    .catch(error => {
-      this.setState({
-        error: 'An error happened while getting this poll',
-      });
-    });
+    console.log(props.history.location);
   }
 
   getPolls() {
@@ -58,56 +39,14 @@ class Voting extends Component {
     });
   }
 
-  handleDeletePoll() {
-    const { currentPoll, polls } = this.state;
-    const { basename, history } = this.props;
-    const jwtToken = getJwtToken();
-
-    axios.delete(`http://localhost:3000/poll/${currentPoll._id}`, {
-      // delete requests send data via data property
-      data: { jwtToken },
-    })
-    .then(
-      response => {
-        history.push(`${basename}`);
-        this.setState({
-          currentPoll: null,
-          polls: polls.filter(poll => poll._id !== currentPoll._id),
-        });
-      },
-      error => {
-        this.setState({
-          error: 'An error happened while deleting your poll',
-        });
-      }
-    );
-  }
-
   handleNewPollTransmitted(newPoll) {
     const { basename, history } = this.props;
-    this.setState({
-      currentPoll: newPoll,
-    });
     history.push(`${basename}poll/${newPoll['_id']}/result`);
-  }
-
-  handleNewOptionsTransmitted(updatedPoll) {
-    const { basename, history } = this.props;
-    this.setState({
-      currentPoll: updatedPoll,
-    });
-    history.push(`${basename}poll/${updatedPoll['_id']}/result`);
-  }
-
-  handleVoteTransmitted(updatedPoll) {
-    this.setState({
-      currentPoll: updatedPoll,
-    });
   }
 
   render() {
     const { basename } = this.props;
-    const { currentPoll, error, polls } = this.state;
+    const { error, polls } = this.state;
 
     return (
       <div className="voting grid-container grid-container-padded">
@@ -135,53 +74,31 @@ class Voting extends Component {
                   polls={polls}
                 />;
               }} />
-              <Route path={`${basename}poll/:id/vote`} render={({ match }) => {
-                if (!error && (!currentPoll || currentPoll._id !== match.params.id)) {
-                  this.getPoll(match.params.id);
-                  return <div className="text-center"><FontAwesomeIcon icon="spinner" spin /> Loading current poll</div>;
-                }
-                else {
-                  return <PollVote
-                    onVoteTransmitted={this.handleVoteTransmitted}
-                    poll={currentPoll}
-                  />;
-                }
-              }} />
-              <Route path={`${basename}poll/:id/result`} render={({ match }) => {
-                if (!error && (!currentPoll || currentPoll._id !== match.params.id)) {
-                  this.getPoll(match.params.id);
-                  return <div className="text-center"><FontAwesomeIcon icon="spinner" spin /> Loading current poll</div>;
-                }
-                else {
-                  return <PollResult
-                    onDeletePoll={this.handleDeletePoll}
-                    poll={currentPoll}
-                  />;
-                }
-              }} />
+              <Route
+                path={`${basename}poll/:pollId/vote`}
+                render={() => <PollContainer
+                  isAuthenticated={isAuthenticated}
+                />}
+              />
+              <Route
+                path={`${basename}poll/:pollId/result`}
+                render={() => <PollContainer
+                  isAuthenticated={isAuthenticated}
+                />}
+              />
+              <ProtectedRoute
+                isAuthenticated={isAuthenticated}
+                path={`${basename}poll/:pollId/edit`}
+                render={() => <PollContainer
+                  isAuthenticated={isAuthenticated}
+                />}
+              />
               <ProtectedRoute
                 isAuthenticated={isAuthenticated}
                 path={`${basename}poll-add`}
                 render={() => <PollAdd
                   onNewPollTransmitted={this.handleNewPollTransmitted}
                 />}
-                project="Decisions, Decisions"
-              />
-              <ProtectedRoute
-                isAuthenticated={isAuthenticated}
-                path={`${basename}poll/:id/edit`}
-                render={({ match }) => {
-                  if (!error && (!currentPoll || currentPoll._id !== match.params.id)) {
-                    this.getPoll(match.params.id);
-                    return <div className="text-center"><FontAwesomeIcon icon="spinner" spin /> Loading current poll</div>;
-                  }
-                  else {
-                    return <PollEdit
-                      onNewOptionsTransmitted={this.handleNewOptionsTransmitted}
-                      poll={currentPoll}
-                    />;
-                  }
-                }}
                 project="Decisions, Decisions"
               />
             </Switch>}
