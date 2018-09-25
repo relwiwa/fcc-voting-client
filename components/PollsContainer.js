@@ -115,7 +115,7 @@ class PollsContainer extends Component {
                 <hr />
               </div>
               <div className="cell medium-6">
-                <h3>My Polls</h3>
+                <h3>Your Polls</h3>
                 {isAuthenticated && <div>
                   <PollsListWithLoadingAndErrorHandling
                     error={errorUserPolls}
@@ -149,6 +149,7 @@ class PollsContainer extends Component {
           path={`${basename}polls`}
           render={() => <div>
             <h3>List Of All Polls</h3>
+            <hr />
             <PollsListWithLoadingAndErrorHandling
               error={errorAllPolls}
               errorReset={<Fragment>
@@ -172,13 +173,23 @@ class PollsContainer extends Component {
               loading={loadingAllPolls}
               polls={allPolls}
             />
+            <hr />
+            <div>
+              <IconButton
+                faIcon="home"
+                foundationClass="primary"
+                text="Dashboard"
+                link={`${basename}`}
+              />
+            </div>
           </div>}
         />
         <ProtectedRoute
           isAuthenticated={isAuthenticated}
           path={`${basename}polls-user`}
           render={() => <div>
-            <h3>List Of My Polls</h3>
+            <h3>List Of Your Polls</h3>
+            <hr />
             <PollsListWithLoadingAndErrorHandling
               error={errorUserPolls}
               errorReset={<Fragment>
@@ -202,6 +213,15 @@ class PollsContainer extends Component {
               loading={loadingUserPolls}
               polls={userPolls}
             />
+            <hr />
+            <div>
+              <IconButton
+                faIcon="home"
+                foundationClass="primary"
+                text="Dashboard"
+                link={`${basename}`}
+              />
+            </div>
           </div>}
           project="Decisions, Decisions"
         />

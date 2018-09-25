@@ -89,7 +89,7 @@ class PollAdd extends Component {
   }
 
   validateInput(value, length) {
-    const pattern = /^[a-zA-Z0-9 ?,.]*$/;
+    const pattern = /^[a-zA-Z0-9 ?,.']*$/;
     if (!pattern.test(value)) {
       return false;
     }
