@@ -21,9 +21,10 @@ class PollResult extends Component {
 
   setupTwitterLink(basename) {
     const { poll } = this.props;
+    const appRoot = `${window.location.protocol}//${window.location.host}`;
     const twitterUrl = 'https://twitter.com/intent/tweet?text=';
-    const text = `Help me decide on Decisions, Decisions on the following question: "${poll.question}"`;
-    const link = `http://localhost:3000${basename}poll/${poll._id}/vote`;
+    const text = `Help me decide on Decisions, Decisions on the following question: "${poll.question}" `;
+    const link = `${appRoot}${basename}poll/${poll._id}/vote`;
     return twitterUrl + text + link;
   }
 

@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 
+import BasenameContext from '../config/BasenameContext';
 import Dashboard from './Dashboard';
 import IconButton from '../../../reusable-components/icon-button';
 import IconLink from '../../../reusable-components/icon-link';
 import PollsList from './PollsList';
 import ProtectedRoute from '../../../reusable-components/protected-route';
-import BasenameContext from '../config/BasenameContext';
-
 import WithLoadingAndErrorHandling from '../hoc/WithLoadingAndErrorHandling';
-const PollsListWithLoadingAndErrorHandling = WithLoadingAndErrorHandling(PollsList);
 
+const PollsListWithLoadingAndErrorHandling = WithLoadingAndErrorHandling(PollsList);
 
 class PollsContainer extends Component {
   constructor(props) {
@@ -35,7 +34,9 @@ class PollsContainer extends Component {
   }
 
   getUsersPolls(userId) {
-    axios.get(`http://localhost:3000/polls/${userId}`)
+    const { apiRoot } = this.props;
+
+    axios.get(`${apiRoot}polls/${userId}`)
     .then(
       response => {
         this.setState({
@@ -55,7 +56,9 @@ class PollsContainer extends Component {
   }
 
   getAllPolls() {
-    axios.get('http://localhost:3000/polls')
+    const { apiRoot } = this.props;
+
+    axios.get(`${apiRoot}polls`)
     .then(
       response => {
         this.setState({
@@ -136,7 +139,7 @@ class PollsContainer extends Component {
                   </div>}
                 </div>}
                 {!isAuthenticated && <div className="cell">
-                  <IconLink link="/sign-in" icon="sign-in-alt" text="Sign in" /> or <IconLink link="/sign-up" icon="user-plus" text="sign up" /> to add and manage your own polls
+                  <IconLink link="/interaction/sign-in" icon="sign-in-alt" text="Sign in" /> or <IconLink link="/interaction/sign-up" icon="user-plus" text="sign up" /> to add and manage your own polls
                 </div>}
               </div>
             </div>
@@ -208,6 +211,7 @@ class PollsContainer extends Component {
 }
 
 PollsContainer.propTypes = {
+  apiRoot: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
 };
 

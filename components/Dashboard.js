@@ -20,7 +20,7 @@ const Dashboard = ({ children }) => {
             <p>
               <IconLink
                 link={{
-                  pathname: '/sign-in',
+                  pathname: '/interaction/sign-in',
                   state: {
                     from: `${basename}`,
                     project: 'Decisions, Decisions',
@@ -32,7 +32,7 @@ const Dashboard = ({ children }) => {
           </div>}
           {!isAuthenticated && <div className="cell medium-4 callout primary">
             <p><FontAwesomeIcon icon="user-plus" size="2x" /></p>
-            <p>If you do not have an account yet, now is the time to <IconLink link="/sign-up" icon="user-plus" text="sign up" />.</p>
+            <p>If you do not have an account yet, now is the time to <IconLink link="/interaction/sign-up" icon="user-plus" text="sign up" />.</p>
           </div>}
           {isAuthenticated && <div className="cell medium-4 callout primary">
             <p><FontAwesomeIcon icon="plus-circle" size="2x" /></p>

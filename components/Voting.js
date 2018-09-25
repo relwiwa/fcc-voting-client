@@ -7,11 +7,12 @@ import PollsContainer from './PollsContainer';
 import ProtectedRoute from '../../../reusable-components/protected-route';
 
 import { AuthenticationContext } from '../../../services/authentication';
+import ApiRootContext from '../../../config/api-root-context';
 import BasenameContext from '../config/BasenameContext';
 
 const Voting = ({ basename = '/backend-projects/voting/' }) => {
-  return (
-    <div className="voting grid-container grid-container-padded">
+  return <ApiRootContext.Consumer>
+    {apiRoot => <div className="voting grid-container grid-container-padded">
       <h1 className="text-center">
         Decisions, Decisions
       </h1>
@@ -22,6 +23,7 @@ const Voting = ({ basename = '/backend-projects/voting/' }) => {
               path={`${basename}`}
               exact
               render={() => <PollsContainer
+                apiRoot={`${apiRoot}voting/`}
                 authenticatedUserId={authenticatedUserId}
                 isAuthenticated={isAuthenticated}
               />}
@@ -30,6 +32,7 @@ const Voting = ({ basename = '/backend-projects/voting/' }) => {
               path={`${basename}polls`}
               exact
               render={() => <PollsContainer
+                apiRoot={`${apiRoot}voting/`}
                 authenticatedUserId={authenticatedUserId}
                 isAuthenticated={isAuthenticated}
               />}
@@ -38,6 +41,7 @@ const Voting = ({ basename = '/backend-projects/voting/' }) => {
               isAuthenticated={isAuthenticated}
               path={`${basename}polls-user`}
               render={() => <PollsContainer
+                apiRoot={`${apiRoot}voting/`}
                 authenticatedUserId={authenticatedUserId}
                 isAuthenticated={isAuthenticated}
               />}
@@ -46,12 +50,14 @@ const Voting = ({ basename = '/backend-projects/voting/' }) => {
             <Route
               path={`${basename}poll/:pollId/vote`}
               render={() => <PollContainer
+                apiRoot={`${apiRoot}voting/`}
                 isAuthenticated={isAuthenticated}
               />}
             />
             <Route
               path={`${basename}poll/:pollId/result`}
               render={() => <PollContainer
+                apiRoot={`${apiRoot}voting/`}
                 isAuthenticated={isAuthenticated}
               />}
             />
@@ -59,6 +65,7 @@ const Voting = ({ basename = '/backend-projects/voting/' }) => {
               isAuthenticated={isAuthenticated}
               path={`${basename}poll/:pollId/edit`}
               render={() => <PollContainer
+                apiRoot={`${apiRoot}voting/`}
                 isAuthenticated={isAuthenticated}
               />}
             />
@@ -66,6 +73,7 @@ const Voting = ({ basename = '/backend-projects/voting/' }) => {
               isAuthenticated={isAuthenticated}
               path={`${basename}poll-add`}
               render={() => <PollContainer
+                apiRoot={`${apiRoot}voting/`}
                 isAuthenticated={isAuthenticated}
               />}
               project="Decisions, Decisions"
@@ -73,8 +81,8 @@ const Voting = ({ basename = '/backend-projects/voting/' }) => {
           </Switch>}
         </AuthenticationContext.Consumer>
       </BasenameContext.Provider>
-    </div>
-  );
+    </div>}
+  </ApiRootContext.Consumer>;
 };
 
 Voting.propTypes = {

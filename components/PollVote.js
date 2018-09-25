@@ -30,12 +30,12 @@ class PollVote extends Component {
 
   handleSubmitVote() {
     const { poll, selectedOptionId } = this.state;
-    const { onVoteTransmitted } = this.props;
+    const { apiRoot, onVoteTransmitted } = this.props;
 
     this.setState({
       votingPhase: SUBMIT_VOTE,
     });
-    axios.patch(`http://localhost:3000/poll/${poll._id}/vote`, {
+    axios.patch(`${apiRoot}poll/${poll._id}/vote`, {
       optionId: selectedOptionId,
       voter: ANONYMOUS_VOTER,
     })
@@ -97,6 +97,7 @@ class PollVote extends Component {
 }
 
 PollVote.propTypes = {
+  apiRoot: PropTypes.string.isRequired,
   poll: PropTypes.object.isRequired,
   onVoteTransmitted: PropTypes.func.isRequired,
 };

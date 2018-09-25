@@ -64,14 +64,14 @@ class PollAdd extends Component {
   }
 
   handleSubmitPoll() {
-    const { onNewPollTransmitted } = this.props;
+    const { apiRoot, onNewPollTransmitted } = this.props;
     const { options, question } = this.state;
     const jwtToken = getJwtToken();
 
     this.setState({
       phase: SUBMIT_POLL,
     });
-    axios.post('http://localhost:3000/poll', {
+    axios.post(`${apiRoot}poll`, {
       question: question.endsWith('?') ? question : `${question}?`,
       options,
       jwtToken,
@@ -155,6 +155,7 @@ class PollAdd extends Component {
 }
 
 PollAdd.propTypes = {
+  apiRoot: PropTypes.string.isRequired,
   onNewPollTransmitted: PropTypes.func.isRequired,
 }
 

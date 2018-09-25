@@ -40,11 +40,13 @@ class PollContainer extends Component {
   }
 
   getPoll(pollId) {
+    const { apiRoot } = this.props;
+
     this.setState({
       currentPoll: null,
       loading: 'Loading poll',
     });
-    axios.get(`http://localhost:3000/poll/${pollId}`)
+    axios.get(`${apiRoot}poll/${pollId}`)
     .then(
       response => this.setState({
         currentPoll: response.data.poll,
@@ -60,10 +62,10 @@ class PollContainer extends Component {
 
   handleDeletePoll(basename) {
     const { currentPoll } = this.state;
-    const { history } = this.props;
+    const { apiRoot, history } = this.props;
     const jwtToken = getJwtToken();
 
-    axios.delete(`http://localhost:3000/poll/${currentPoll._id}`, {
+    axios.delete(`${apiRoot}poll/${currentPoll._id}`, {
       // delete requests send data via data property
       data: { jwtToken },
     })
@@ -126,7 +128,7 @@ class PollContainer extends Component {
   }
 
   render() {
-    const { isAuthenticated } = this.props;
+    const { apiRoot, isAuthenticated } = this.props;
     const { currentPoll, error, loading } = this.state;
 
     return <BasenameContext.Consumer>
@@ -134,6 +136,7 @@ class PollContainer extends Component {
         <Route
           path={`${basename}poll/:id/vote`}
           render={() => <PollVoteWithLoadingAndErrorHandling
+            apiRoot={apiRoot}
             error={error}
             errorReset={this.renderErrorReset(basename)}
             loading={loading}
@@ -155,6 +158,7 @@ class PollContainer extends Component {
           isAuthenticated={isAuthenticated}
           path={`${basename}poll/:id/edit`}
           render={() => <PollEditWithLoadingAndErrorHandling
+            apiRoot={apiRoot}
             error={error}
             errorReset={this.renderErrorReset(basename)}
             loading={loading}
@@ -166,7 +170,8 @@ class PollContainer extends Component {
         <ProtectedRoute
           isAuthenticated={isAuthenticated}
           path={`${basename}poll-add`}
-          render={() => <PollAdd 
+          render={() => <PollAdd
+            apiRoot={apiRoot}
             onNewPollTransmitted={(newPoll) => this.handleNewPollTransmitted(newPoll, basename)}
           />}
           project="Decisions, Decisions"

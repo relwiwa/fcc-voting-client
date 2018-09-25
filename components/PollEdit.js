@@ -57,14 +57,14 @@ class PollEdit extends Component {
   }
 
   handleSubmitPoll() {
-    const { onNewOptionsTransmitted, poll } = this.props;
+    const { apiRoot, onNewOptionsTransmitted, poll } = this.props;
     const { options } = this.state;
     const jwtToken = getJwtToken();
   
     this.setState({
       phase: SUBMIT_POLL,
     });
-    axios.patch(`http://localhost:3000/poll/${poll._id}`, {
+    axios.patch(`${apiRoot}poll/${poll._id}`, {
       options,
       jwtToken,
     })
@@ -139,6 +139,7 @@ class PollEdit extends Component {
 }
 
 PollEdit.propTypes = {
+  apiRoot: PropTypes.string.isRequired,
   onNewOptionsTransmitted: PropTypes.func.isRequired,
   poll: PropTypes.object.isRequired,
 };
